@@ -14,6 +14,31 @@ DATA_DIR = os.path.join(BASE_DIR, 'data')
 
 CSV_FILE = os.path.join(DATA_DIR, 'Outbreak.csv')
 JSON_FILE = os.path.join(DATA_DIR, 'Outbreak.json')
+JS_FILE = os.path.join(DATA_DIR, 'Outbreak.js')
+
+class JSWriter:
+
+    def __init__(self):
+
+        self.file_path = JS_FILE
+
+    def write_file(self, master_contents):
+        try:
+
+            # Open the file with option 'rU' Enable Universal newline support
+            with open(self.file_path, 'w') as file_instance:
+
+                file_instance.write('var data = ')
+
+                file_instance.write(
+                    #json.dumps(master_contents)
+                    json.dumps(master_contents, indent=2)
+                )
+
+                file_instance.write(';')
+
+        except IOError as err:
+            exit(err)
 
 
 class JSONWriter:
@@ -29,11 +54,12 @@ class JSONWriter:
             with open(self.file_path, 'w') as file_instance:
 
                 file_instance.write(
+                    #json.dumps(master_contents)
                     json.dumps(master_contents, indent=2)
                 )
 
         except IOError as err:
-            self.import_logger.file_match_not_found(self.file_path)
+            exit(err)
 
 
 class CSVReader:
@@ -59,19 +85,19 @@ class CSVReader:
                 return file_output
 
         except IOError as err:
-            self.import_logger.file_match_not_found(self.file_path)
+            exit(err)
 
 
 def main():
 
     csv_reader = CSVReader()
-    json_writer = JSONWriter()
+    js_writer = JSWriter()
 
     # Read the CSV file
     file_contents = csv_reader.read_file()
 
     # Write the contents of the CSV file to the JSON file
-    json_writer.write_file(file_contents)
+    js_writer.write_file(file_contents)
 
     exit(0)
 
