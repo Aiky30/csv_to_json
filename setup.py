@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(
-    name='csv-to-json',
+    name='csv_to_json',
     version='1.0',
     packages=[''],
     url='',
