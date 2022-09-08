@@ -1,49 +1,34 @@
-import os
-
 import csv
 import json
+import sys
 
 
-class JSWriter:
+class JsonWriter:
 
     def __init__(self, filename):
-
         self.file_path = filename
 
     def write_file(self, master_contents):
         try:
-
-            # Open the file with option 'rU' Enable Universal newline support
             with open(self.file_path, 'w') as file_instance:
-
-                file_instance.write('var data = ')
-
                 file_instance.write(
-                    #json.dumps(master_contents)
                     json.dumps(master_contents, indent=2)
                 )
-
-                file_instance.write(';')
-
         except IOError as err:
             exit(err)
 
 
-class CSVReader:
+class CsvReader:
 
     def __init__(self, filename):
-
         self.file_path = filename
 
     def read_file(self):
-
         file_output = []
 
         try:
-
             # Open the file with option 'rU' Enable Universal newline support
             with open(self.file_path, 'rU') as file_instance:
-
                 reader = csv.DictReader(file_instance)
 
                 for row in reader:
@@ -55,15 +40,21 @@ class CSVReader:
             exit(err)
 
 
-def main(config):
-
-    csv_reader = CSVReader(config.input)
-    js_writer = JSWriter(config.output)
+def main(input_file_path, output_file_path):
+    csv_reader = CsvReader(input_file_path)
+    json_writer = JsonWriter(output_file_path)
 
     # Read the CSV file
     file_contents = csv_reader.read_file()
 
     # Write the contents of the CSV file to the JSON file
-    js_writer.write_file(file_contents)
+    json_writer.write_file(file_contents)
 
     exit(0)
+
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        raise SyntaxError("This command requires an input file followed by an output file provided.")
+
+    main(sys.argv[1], sys.argv[2])
