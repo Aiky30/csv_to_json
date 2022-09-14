@@ -1,0 +1,89 @@
+pipeline:
+  name: sars-cov-2
+  docker_image: ''
+  protocols:
+  - name: illumina-sars-cov-2-artic-v3
+    kit:
+      name: Artic V3
+      slug: articv3
+    sequencer_technology:
+      name: Illumina
+      slug: illumina
+    pathogen:
+      name: Sars-CoV-2
+      slug: sars-cov-2
+  - name: ont-sars-cov-2-artic-v4
+    kit:
+      name: Artic V4
+      slug: articv4
+    sequencer_technology:
+      name: ONT
+      slug: ont
+    pathogen:
+      name: Sars-CoV-2
+      slug: sars-cov-2
+pipeline_version:
+  docker_tag: 1.0.1
+input_fields:
+- field_name: sample_id
+  field_type: string
+  required: true
+  validation_rules:
+  - rule_type: min_max
+    min: 32
+    max: 32
+  - rule_type: regex
+    expression: \d+
+- field_name: study_type
+  field_type: string
+  required: true
+  validation_rules:
+  - rule_type: enum
+    values:
+    - pillar_1
+    - pillar_2
+    - wtsi
+- field_name: batch
+  field_type: number
+  required: true
+  validation_rules:
+  - rule_type: integer
+- field_name: score
+  field_type: number
+  required: true
+  validation_rules:
+  - rule_type: range
+    min: 10
+    max: 100
+- field_name: collection_date
+  field_type: date
+  required: false
+  validation_rules:
+  - rule_type: in_past
+    allow_today: false
+  - rule_type: not_null
+input_row_validation_rules:
+- rule_type: not_null
+  fields:
+  - collection_date
+  - lab_received_date
+  min: 1
+input_set_validation_rules:
+- rule_type: match_row_count
+  fields:
+  - control_sample
+  values:
+  - +
+  - '-'
+  min: 3
+  max: 5
+output_fields:
+- field_name: sample_id
+  field_type: string
+  required: true
+  validation_rules:
+  - {}
+output_row_validation_rules:
+- {}
+output_set_validation_rules:
+- {}
