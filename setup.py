@@ -1,9 +1,9 @@
 from distutils.core import setup
 
 setup(
-    name='csv_to_json',
+    name='file-type-converter',
     version='1.0',
-    packages=[''],
+    packages=['pyyaml'],
     url='',
     license='MIT 3.0',
     author='aiky30',
