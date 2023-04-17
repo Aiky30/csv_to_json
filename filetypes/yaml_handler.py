@@ -14,3 +14,10 @@ class YamlHandler:
                 )
         except IOError as err:
             exit(err)
+
+    def read_file(self):
+        try:
+            with open(self.file_path, 'r') as file_instance:
+                return yaml.safe_load(file_instance)
+        except IOError as err:
+            exit(err)
